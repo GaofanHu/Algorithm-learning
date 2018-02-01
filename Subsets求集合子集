@@ -1,4 +1,4 @@
-Subsets问题，求一个集合的所有子集
+1.Subsets问题，求一个集合的所有子集
 
 class Solution {
     public List<List<Integer>> subsets(int[] nums) {
@@ -23,3 +23,19 @@ class Solution {
         }
     }
 }
+
+2.求集合的子集，但是不能有重复，比如：
+If nums = [1,2,2], a solution is:
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+
+这种情况，只需要考虑在for 循环中加一个判断：
+if(i > 0 && nums[i] == nums[i-1] && i != pos)
+                continue;
+考虑i>0是因为当i=0时，nums[i-1]溢出。i != pos则是说这不是循环的第一次，当不是循环的第一次时，则不能添加两次一样的数值。
