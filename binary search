@@ -1,0 +1,4 @@
+1. start + 1 < end 当头尾相邻时退出循环
+2. start + (end - start) /2 求中点，但是可以避免溢出
+3. A[mid] ==, <, >
+4. A[start] A[end]? target
