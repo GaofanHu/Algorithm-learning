@@ -1,0 +1,57 @@
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+For example,
+[1,1,2] have the following unique permutations:
+[
+  [1,1,2],
+  [1,2,1],
+  [2,1,1]
+]
+
+如果没有重复元素，那么可以在每次dfs时，判断元素是否已经存在于path中，存在，则continue，不存在则添加。
+
+下面是有重复元素的代码：
+
+class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        ArrayList<Integer> path = new ArrayList<Integer>();
+        boolean[] used = new boolean[nums.length];    //数组来判断每个元素是否使用过
+        for(boolean i: used){
+            i = false;
+        }
+        Arrays.sort(nums);
+        permutation(result, path, nums, used);
+        
+        return result;
+    }
+    
+    public void permutation(List<List<Integer>> result, 
+                            ArrayList<Integer> path, 
+                            int[] nums, 
+                            boolean[] used){
+        if(path.size() == nums.length){
+            result.add(new ArrayList<Integer>(path));
+        }else{
+            for(int i = 0; i < nums.length; i++){
+                if(i > 0 && nums[i] == nums[i-1] && !used[i-1] || used[i]){ 
+                //若这个元素使用过，自然应该跳过，若这个元素和上一个相等，且上一个未使用过，说明上一个元素一定是因为某种原因被跳过，
+                比如[1,1,1,3]，若path中是[3,1,1,1]，那么当for循环从[3]开始，进行第二层时，即访问的是第二个1，第一个被for循环自然跳过时，
+                则因为第一个1是false，则跳过，是因为，若前面有一样的元素，而没进入path，且因为遍历一定是先从前向后加入的，说明在其他的层中，
+                已经有了相同的path，所以跳过。
+                比如[1,1,1,3,4],当有了一个[3,1,1,1]时，就可以再遍历4，或者[3,1,1]通过for循环中i的自然增加，先加入4,[3,1,1,4]，再加入最后
+                一个1.
+                或者可以理解为，排列数组时，虽然是dfs，但是都是从做向右看，当已经访问后面的元素时，再访问前面的相同元素，就没有意义了。因为
+                在其他的遍历中，一定已经被添加过了相同的path，所以，即使前面一个数是false，也因为其他层用过，而被跳过这个数。
+                    continue;
+                }else{
+                    path.add(nums[i]);
+                    used[i] = true;
+                    permutation(result, path, nums, used);
+                    path.remove(path.size() - 1);
+                    used[i] = false;
+                }
+            }
+        }
+    }
+}
