@@ -23,7 +23,8 @@ class Solution {
             }
             if(nums[start] > nums[mid]){    //判断中线在哪儿，以方便后边二分，此为中线在右
                 if((nums[mid] <= target) && (nums[end] >= target)){   //这是确定target在中线右边
-                //！！！！此刻注意，nums[end] >==== target，不要用nums[start] > target。判断在哪一边就用哪一边的值，不要跨界
+                //！！！！此刻注意，nums[end] >==== target，不要用nums[start] > target。判断在哪一边就用哪一边的值，不要跨界，因为数组有可能
+                就是递增的
                     start = mid;
                 }
                 else{   //target在中线左边
@@ -32,7 +33,8 @@ class Solution {
             }
             else{   //中线在左
                 if((nums[mid] >= target) && (nums[start] <= target)){   //target在中线左边
-                //！！！！此刻注意，nums[start] <==== target，不要用nums[end] > target。判断在哪一边就用哪一边的值，不要跨界
+                //！！！！此刻注意，nums[start] <==== target，不要用nums[end] > target。判断在哪一边就用哪一边的值，不要跨界，因为数组有可能
+                就是递增的
                     end = mid;
                 }
                 else{   //target在中线右边
