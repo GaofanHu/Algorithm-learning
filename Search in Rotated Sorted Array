@@ -1,0 +1,51 @@
+https://leetcode.com/problems/search-in-rotated-sorted-array/description/
+
+Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.
+
+(i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+
+You are given a target value to search. If found in the array return its index, otherwise return -1.
+
+You may assume no duplicate exists in the array.
+
+class Solution {
+    public int search(int[] nums, int target) {
+        if(nums.length == 0){
+            return -1;
+        }
+        int start = 0;
+        int end = nums.length - 1;
+        int mid;
+        while(start + 1 < end){
+            mid = start + (end - start)/2;
+            if(nums[mid] == target){
+                return mid;
+            }
+            if(nums[start] > nums[mid]){    //判断中线在哪儿，以方便后边二分，此为中线在右
+                if((nums[mid] <= target) && (nums[end] >= target)){   //这是确定target在中线右边
+                //！！！！此刻注意，nums[end] >==== target，不要用nums[start] > target。判断在哪一边就用哪一边的值，不要跨界
+                    start = mid;
+                }
+                else{   //target在中线左边
+                    end = mid;
+                }
+            }
+            else{   //中线在左
+                if((nums[mid] >= target) && (nums[start] <= target)){   //target在中线左边
+                //！！！！此刻注意，nums[start] <==== target，不要用nums[end] > target。判断在哪一边就用哪一边的值，不要跨界
+                    end = mid;
+                }
+                else{   //target在中线右边
+                    start = mid;
+                }
+            }
+        }
+        if(nums[start] == target){
+            return start;
+        }
+        if(nums[end] == target){
+            return end;
+        }
+        return -1;
+    }
+}
