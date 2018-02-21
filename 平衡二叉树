@@ -1,0 +1,31 @@
+首先，平衡二叉树指，左右树高度差不超过1，且左右树都是平衡二叉树，高度指的是最大高度，如下图，也是平衡二叉树：
+[1,1,1,11,1,1,null,1]，图片见平衡二叉树.png
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        return maxdepth(root) != -1;
+    }
+    
+    int maxdepth(TreeNode root){
+        if(root == null){
+            return 0;
+        }
+        int left = maxdepth(root.left);
+        int right = maxdepth(root.right);
+        
+        if(Math.abs(left - right) > 1 || left == -1 || right == -1){
+            return -1;
+        }
+        
+        return Math.max(left, right) + 1;
+    }
+}
