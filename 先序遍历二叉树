@@ -1,0 +1,89 @@
+基本有三种做法，1是自上而下，即遍历。2是自下而上，即分治。还有一种用stack的方法，因为方法1和2本质上都需要递归。stack则是非递归算法。
+1.
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        ArrayList<Integer> res = new ArrayList<Integer>();
+        traverse(root, res);
+        return res;
+    }
+    
+    void traverse(TreeNode root, ArrayList<Integer> res){
+        if(root == null){
+            return;
+        }
+        res.add(root.val);
+        traverse(root.left, res);
+        traverse(root.right, res);
+    }
+}
+
+2./**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        ArrayList<Integer> res = new ArrayList<Integer>();
+        if(root == null){
+            return res;   //注意这个地方不要返回null或者直接return;  会报错
+        }
+        List<Integer> left = preorderTraversal(root.left);      //这是分
+        List<Integer> right = preorderTraversal(root.right);
+        
+        res.add(root.val);    //这是治
+        res.addAll(left);
+        res.addAll(right);
+        
+        return res;
+        
+    }
+}
+
+3.
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root){
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        List<Integer> pre = new ArrayList<Integer>();
+        
+        if(root == null){
+            return pre;
+        }
+        stack.push(root);
+        while(!stack.empty()){
+            TreeNode node = stack.pop();
+            pre.add(node.val);
+            if(node.right != null){
+                stack.push(node.right);
+            }
+            if(node.left != null){
+                stack.push(node.left);
+            }
+        }
+        
+        return pre;
+        
+    }
+}
