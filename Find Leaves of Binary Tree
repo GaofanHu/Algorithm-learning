@@ -1,0 +1,51 @@
+https://leetcode.com/problems/find-leaves-of-binary-tree/description/
+这道题是说，每次移除叶子节点，然后最后返回每一次移除的叶子节点的list，比如：
+
+Given binary tree 
+          1
+         / \
+        2   3
+       / \     
+      4   5    
+      
+Returns [4, 5, 3], [2], [1].
+
+[4，5，3]是第一次的叶子节点，先移除，移除后，[2]是叶子节点，[1]是最后的叶子节点。
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> findLeaves(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        List<Integer> path = new ArrayList<Integer>();
+        
+        while(root != null){
+            if(isleaf(root, path)) root = null;
+            res.add(path);
+            path = new ArrayList<Integer>();
+        }
+        return res;
+    }
+    
+    boolean isleaf(TreeNode root, List<Integer> path){      //这种方法可以直接跳两层，看一个点的子节点是不是叶子节点
+        if(root.left == null && root.right == null){   
+            path.add(root.val);
+            return true;
+        }
+        if(root.left != null){
+            if(isleaf(root.left, path)) root.left = null;   //子节点是叶子节点，则把子节点设为空
+        }
+        if(root.right != null){
+            if(isleaf(root.right, path)) root.right = null;
+        }
+        
+        return false;
+    }
+}
