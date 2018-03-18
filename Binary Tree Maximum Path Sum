@@ -1,0 +1,57 @@
+Given a binary tree, find the maximum path sum.
+
+For this problem, a path is defined as any sequence of nodes from some starting node to any node in the tree along the parent-child connections. The path must contain at least one node and does not need to go through the root.
+
+For example:
+Given the below binary tree,
+
+       1
+      / \
+     2   3
+Return 6.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    private class res{            
+    //这是因为在递归时，每次要返回两个值，一个singlepath，即左右不连通，一个是maxpath。也可以不用类，直接返回一个数组，数组存2个数字即可
+        int single, maxpath;
+        res(int single, int maxpath){
+            this.single = single;
+            this.maxpath = maxpath;
+        }
+    }
+    
+    private res helper(TreeNode root){
+        if(root == null){
+            return new res(0, Integer.MIN_VALUE);
+        }
+        
+        //分
+        res left = helper(root.left);    
+        res right = helper(root.right);
+        
+        //治
+        int single = Math.max(left.single, right.single) + root.val;  
+        single = Math.max(single, 0);
+        //这里每次求出一个树里，最大的左右不连通的singlepath，然后用这个singlepath继续递归到上一级的树
+        
+        int maxi = Math.max(left.maxpath, right.maxpath);     //这里求出一个树里，最大的path
+        maxi = Math.max(maxi, left.single + right.single + root.val);
+        
+        return new res(single, maxi);
+    }
+    
+    
+    public int maxPathSum(TreeNode root) {
+        res temp = helper(root);
+        return temp.maxpath;
+    }
+}
