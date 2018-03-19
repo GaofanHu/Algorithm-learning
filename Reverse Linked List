@@ -1,0 +1,49 @@
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if(head == null){
+            return head;
+        }
+        
+        ListNode temp;
+        ListNode prev = null;
+        while(head != null){
+            temp = head.next;
+            head.next = prev;
+            prev = head;
+            head = temp;
+        }
+        return prev;
+    }
+}
+
+自己的写法：
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if(head == null){
+            return head;
+        }
+        
+        ListNode temp = head.next;
+        ListNode prev;
+        head.next = null;
+        while(temp != null){
+            prev = temp;
+            temp = temp.next;
+            prev.next = head;
+            head = prev;         
+        }
+        return head;
+    }
+}
+
+两种写法本质上差不多，都是用一个temp（两种写法命名不同）存储下一次要翻转的点，然后一步一步翻转。
+但是我自己的写法，预先处理了第一个点。建议使用通用写法。
