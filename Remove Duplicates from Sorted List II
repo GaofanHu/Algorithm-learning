@@ -36,6 +36,8 @@ class Solution {
                 那么node会直接指向第一个2，在下一次判断时，node.next.next就为null，这时，[2,2]就无法删除。
             }
         }
-        return dummy.next;
+        return dummy.next; 
+        //这个地方，如果是return head，那么如果head被删除，整个返回就会不正确，比如[1,1,3,2,2,2]，只会返回[1,1,3],因为linked list的操作
+        是针对于每个node的指针的，如果head被删除，那么返回head，一开始的删除操作就白做了。
     }
 }
