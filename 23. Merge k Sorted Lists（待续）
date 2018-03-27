@@ -1,0 +1,47 @@
+https://leetcode.com/problems/merge-k-sorted-lists/description/
+
+优先队列实现小顶堆，并用小顶堆对每个sorted list的首个node排序，每次取出堆顶元素
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    private Comparator<ListNode> c = new Comparator<ListNode>(){
+        public int compare(ListNode left, ListNode right){
+            if(left == null) return 1;
+            if(right == null) return -1;
+            return left.val - right.val;
+        }
+    };      //这里为什么要有";"，在新建类的时候override（重写？），有什么要求吗
+    
+    public ListNode mergeKLists(ListNode[] lists) {     
+        //这个的listnode[]，是个数组的话，那么每个Node后面链接的node不用放在数组里面吗
+        //还是说把首个node存在数组里就可以了，后面的可以用指针指，存在堆里？
+        if(lists == null || lists.length == 0){
+            return null;
+        }
+        
+        Queue<ListNode> heap = new PriorityQueue<ListNode>(lists.length, c);//这玩意儿的参数怎么回事
+        
+        for(int i = 0; i < lists.length; i++){
+            if(lists[i] != null) heap.add(lists[i]);
+        }
+        
+        ListNode dummy = new ListNode(0);
+        ListNode tail = dummy;
+        ListNode head = null;
+        while(!heap.isEmpty()){
+            head = heap.poll();
+            tail.next = head;
+            tail = head;
+            if(head.next != null){
+                heap.add(head.next);
+            }
+        }
+        return dummy.next;
+    }
+}
