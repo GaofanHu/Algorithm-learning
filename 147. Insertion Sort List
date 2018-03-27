@@ -1,0 +1,42 @@
+https://leetcode.com/problems/insertion-sort-list/description/
+
+此题虽然有一个dummy node，但是dummy不用立即链接在head前面，用dummy直接新生成sorted list
+
+dummy一个列表，原head一个列表，这样可以省掉很多问题
+
+这里也是因为insertion sort本来就是把无序的一个数组的元素，插入到另一个有序的里面，所以两个列表也会比较方便。
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode insertionSortList(ListNode head) {
+        if(head == null || head.next == null){
+            return head;
+        }
+        
+        ListNode dummy = new ListNode(0);
+        ListNode pre = dummy;
+        ListNode cur = head;
+        ListNode temp = null;
+        
+        while(cur != null){
+            temp = cur.next;
+            
+            while(pre.next != null && pre.next.val < cur.val){
+                pre = pre.next;
+            }
+            
+            cur.next = pre.next;
+            pre.next = cur;
+            pre = dummy;
+            cur = temp;
+        }
+        
+        return dummy.next;
+    }
+}
