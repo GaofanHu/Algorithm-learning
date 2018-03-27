@@ -1,0 +1,108 @@
+https://leetcode.com/problems/copy-list-with-random-pointer/description/
+
+此题和clone graph差不多，用hashmap的话，用hashmap存储<原节点，新节点>，然后再clone random指针或者graph的neighbors
+
+而这道题有两种做法，第一种如下，把新节点插到原节点后面，如1->1'->2->2'，然后再链接random指针，再分离，分离时记得恢复原链表（因为此题是deep COPY）
+/**
+ * Definition for singly-linked list with a random pointer.
+ * class RandomListNode {
+ *     int label;
+ *     RandomListNode next, random;
+ *     RandomListNode(int x) { this.label = x; }
+ * };
+ */
+public class Solution {
+    private void copy(RandomListNode head){
+        RandomListNode h = head;
+        RandomListNode temp = head;
+        RandomListNode newNode;
+        
+        while(h != null){
+            temp = h.next;
+            newNode = new RandomListNode(h.label);
+            h.next = newNode;
+            newNode.next = temp;
+            h = temp;
+        }
+        
+    }
+    
+    private void copyRandom(RandomListNode head){
+        RandomListNode h = head;
+        
+        while(h != null){
+            if(h.random != null){
+                h.next.random = h.random.next;
+            }
+            h = h.next.next;
+        }
+    }
+    
+    private RandomListNode split(RandomListNode head){
+        RandomListNode start = head.next;
+        RandomListNode tail = start;
+        RandomListNode temp = head;
+        
+        while(head != null){
+            temp = tail.next;
+            head.next = temp;
+            head = head.next;
+            if(head != null){
+                tail.next = head.next;
+                tail = tail.next; 
+            }
+        }
+        
+        return start;
+    }
+    
+    public RandomListNode copyRandomList(RandomListNode head) {
+        if(head == null){
+            return head;
+        }
+        
+        copy(head);
+        copyRandom(head);
+        return split(head);     
+    }
+}
+
+hashmap的方法如下：
+public class Solution {
+    public RandomListNode copyRandomList(RandomListNode head) {
+        if(head == null){
+            return head;
+        }
+        
+        HashMap<RandomListNode, RandomListNode> map = new HashMap<RandomListNode, RandomListNode>();
+        RandomListNode dummy = new RandomListNode(0);   //这里也不用把dummy连到head后面
+        RandomListNode pre = dummy;
+        RandomListNode newNode;
+        
+        while(head != null){
+            if(map.containsKey(head)){    //添加节点对至map中
+                newNode = map.get(head);
+            }else{
+                newNode = new RandomListNode(head.label);
+                map.put(head, newNode);
+            }
+            
+            pre.next = newNode;   //连接新节点
+              
+            if(head.random != null){    //给新节点添加random 指针
+               if(map.containsKey(head.random)){
+                   newNode.random = map.get(head.random);
+               }else{
+                   newNode.random = new RandomListNode(head.random.label);
+                   map.put(head.random, newNode.random);
+               } 
+            }
+            
+            
+            pre = pre.next;
+            head = head.next;
+        }
+        
+        return dummy.next;
+    }
+}
