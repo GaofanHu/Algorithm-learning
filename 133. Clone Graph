@@ -40,3 +40,37 @@ public class Solution {
         return map.get(node);
     }
 }
+
+递归方法：
+public class Solution {
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        Map<UndirectedGraphNode, UndirectedGraphNode> map = new HashMap<>();
+        return clone(node, map);
+    }
+
+    public UndirectedGraphNode clone(UndirectedGraphNode node, Map<UndirectedGraphNode, UndirectedGraphNode> map)
+        //相当于每次求一个点的neighbors
+    {
+        if (node == null)
+        {
+            return null;
+        }
+        
+        UndirectedGraphNode newNode = new UndirectedGraphNode(node.label);
+        map.put(node, newNode);
+
+        for (UndirectedGraphNode neighbor : node.neighbors)
+        {
+            if(map.containsKey(neighbor))
+            {
+                newNode.neighbors.add(map.get(neighbor));
+            }
+            else
+            {
+                newNode.neighbors.add(clone(neighbor, map));    
+         //如果map中没有此点，则递归一次加入此点。在递归时，加入此点的neighbors。因为递归函数返回的是newNode，所以递归后，不会加多余的东西
+            }
+        }
+        return newNode;
+    }
+}
