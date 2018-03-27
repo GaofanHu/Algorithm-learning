@@ -1,0 +1,111 @@
+https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/description/
+
+此题可以用分治法做，即用slow-fast指针找中点，然后left是左子树，mid是root，right是右子树，这样即可保证高度上的平衡
+下面的第二种方法即是分治法。
+除此之外，也可以在分治法上延展，每次把链表长度截半，这样每次截半时，即可以找到root点，然后left and right。
+这样做是O(n)。
+分治法好像也是？因为在merge的时候，其实没有比较左右的大小，应该比O(nlogn)小，但是不太清楚。。。
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+ 
+ class Solution {
+    private ListNode cur;     //全局变量cur
+    
+    private int getListLength(ListNode head){
+        int size = 0;
+        
+        while(head != null){
+            size++;
+            head = head.next;
+        }
+        return size;
+    }
+    
+    public TreeNode sortedListToBST(ListNode head) {
+        int size;
+        
+        cur = head;
+        size = getListLength(head);
+        
+        return helper(size);
+    }
+    
+    private TreeNode helper(int size){
+        if(size <= 0){
+            return null;
+        }
+        
+        TreeNode left = helper(size / 2);
+        TreeNode root = new TreeNode(cur.val);
+        cur = cur.next;       
+        //这里因为上面size判断是<=0，所以即使只有一个节点，也会往下走一层（这一层就直接return null）。所以这个cur到最后是在root的地方
+        TreeNode right = helper(size - 1- size / 2);
+        
+        root.left = left;
+        root.right = right;
+        
+        return root;
+    }
+}
+
+分治法：
+class Solution {
+    private ListNode findmid(ListNode head){
+        if(head == null || head.next == null){
+            return head;
+        }
+        ListNode slow = head;
+        ListNode fast = head.next;
+        
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+    
+    private TreeNode merge(TreeNode left, TreeNode right, ListNode head){    
+        TreeNode h = new TreeNode(head.val);
+        h.left = left;
+        h.right = right;
+        return h;
+    }
+    
+    public TreeNode sortedListToBST(ListNode head) {
+        if(head == null){
+            return null;
+        }else if(head.next == null){
+            return new TreeNode(head.val);
+        }
+        
+        ListNode mid = findmid(head);
+        TreeNode right = sortedListToBST(mid.next);
+        mid.next = null;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode temp = dummy;
+        while(temp.next != mid){
+            temp = temp.next;
+        }
+        temp.next = null;
+            
+        TreeNode left = sortedListToBST(dummy.next);
+        return merge(left, right, mid);
+    }
+}
