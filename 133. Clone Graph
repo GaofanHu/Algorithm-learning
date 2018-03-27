@@ -1,0 +1,42 @@
+/**
+ * Definition for undirected graph.
+ * class UndirectedGraphNode {
+ *     int label;
+ *     List<UndirectedGraphNode> neighbors;
+ *     UndirectedGraphNode(int x) { label = x; neighbors = new ArrayList<UndirectedGraphNode>(); }
+ * };
+ */
+public class Solution {
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        if(node == null){
+            return node;
+        }
+        ArrayList<UndirectedGraphNode> nodes = new ArrayList<UndirectedGraphNode>();
+        HashMap<UndirectedGraphNode, UndirectedGraphNode> map =
+            new HashMap<UndirectedGraphNode, UndirectedGraphNode>();
+        
+        nodes.add(node);      //nodes存储原图的节点
+        map.put(node, new UndirectedGraphNode(node.label)); //hash表放原节点和新节点
+        int start = 0;
+        while(start < nodes.size()){
+            UndirectedGraphNode head = nodes.get(start++);
+            
+            for(int i = 0; i < head.neighbors.size(); i++){
+                UndirectedGraphNode neighbor = head.neighbors.get(i);
+                if(!map.containsKey(neighbor)){   //如果hash表里已经有了此节点，就不管，没有的话，nodes和hash表都加入新节点
+                    nodes.add(neighbor);
+                    map.put(neighbor, new UndirectedGraphNode(neighbor.label));
+                }
+            }
+        }
+        UndirectedGraphNode newNode = null;
+        for(int i = 0; i < nodes.size(); i++){    //对nodes里每个节点的邻居遍历，并添加到新节点的邻居中
+            newNode = map.get(nodes.get(i));
+            for(int j = 0; j < nodes.get(i).neighbors.size(); j++){
+                newNode.neighbors.add(map.get(nodes.get(i).neighbors.get(j)));  //注意这里要添加的也是map里对应的新节点
+            }
+        }
+        
+        return map.get(node);
+    }
+}
