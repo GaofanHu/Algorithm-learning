@@ -1,0 +1,51 @@
+https://leetcode.com/problems/jump-game-ii/description/
+
+此题也是两种解法，dp和greedy。但是dp速度太慢，greedy强烈推荐。
+
+greedy:
+class Solution {
+    public int jump(int[] nums) {
+        int start = 0, end = 0, jumps = 0;
+        int l = nums.length;
+        int far;    //far代表每一步，能走的最远的地方
+        
+        while(end < l - 1){   //这里不要用start<l
+        //因为，如果用start<l，那么当nums[]=[0],jumps也会等于1。
+        //而如果start <= l，那么当end刚好走到数组结尾，并且后面一层循环中，每一个数字都没有再超过结尾，即没有更新far和end。那么就无限循环。
+            jumps++;
+            far = end;
+            for(int i = start; i <= end; i++){      //end每走一步后更新，每次更新说明走了一步
+               if(i + nums[i] > far){     
+               //在每一步中，可以更新far，比如第一步可以走到10，那么far=10，第二步，则是从1到10里看，能走到的最远的地方，且随时更新
+                   far = i + nums[i];
+               } 
+            }
+            start = end + 1;    //先更新start，再更新end，这样start每次都是从上一步的下一个index开始计算，相当于遍历了整个数组
+            end = far;
+        }
+        return jumps;
+    }
+}
+
+dp:
+class Solution {
+    public int jump(int[] nums) {
+        int l = nums.length;
+        int[] dp = new int[l];
+        
+        dp[0] = 0;
+        
+        for(int i = 1; i < l; i++){
+            dp[i] = Integer.MAX_VALUE;    //这个maxvalue暂时还不清楚。
+            for(int j = 0; j < i; j++){   
+            //这里不要直接从前向后看，而是i在j前，然后看j从0开始，能否达到或者超过i点，因为当有一个j达到时，那么就不用看后面的j
+            //是因为这道题可以有一个就近原则，且越近的点达到，跳跃次数也越少
+                if(j + nums[j] >= i && dp[j] != Integer.MAX_VALUE){
+                    dp[i] = dp[j] + 1;
+                    break;
+                }
+            }
+        }
+        return dp[l-1];
+    }
+}
