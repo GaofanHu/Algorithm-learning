@@ -1,0 +1,59 @@
+https://leetcode.com/problems/jump-game/description/
+
+greedy和dp，但是dp太慢
+
+greedy:
+class Solution {
+    public boolean canJump(int[] nums) {
+        int l = nums.length;
+        if(l == 1){
+            return true;
+        }
+        int max = nums[0];  //max是最远能达到的地方，可能超过结尾
+        for(int i = 0; i < l && i <= max; i++){   
+        //判断i < max是因为max是动态更新的，每次看第i点能走到的最远的地方，然后在这个范围内，再动态更新max，如果max不更新，则不要超过max
+            if(nums[i] + i > max){
+                max = nums[i] + i;
+            }
+        }
+        return max >= l-1;
+    }
+}
+
+dp仅供参考：
+class Solution {
+    public boolean canJump(int[] nums) {
+        int l = nums.length;
+        if(l == 1){
+            return true;
+        }
+        int[] np = new int[l];
+        
+        if(nums[0] != 0){
+            np[0] = 1;
+        }else{
+            return false;
+        }
+        
+        for(int i = 0; i < l; i++){
+            if(np[i] == 0){
+                break;
+            }
+            if(np[l - 1] == 1 || nums[i] >= l - i - 1){
+                return true;
+            }
+            int j;
+            for(j = 1; j <= nums[i] && i + j < l; j++){
+                if(nums[i + j] < nums[i] - j){
+                    np[i + j] = 1;
+                }else{
+                    np[i + j] = 1;
+                    break;
+                }
+            }
+            i = i + j - 1;
+        }
+        return false;
+        
+    }
+}
