@@ -1,0 +1,42 @@
+27 Remove Element：
+https://leetcode.com/problems/remove-element/description/
+
+class Solution {
+    public int removeElement(int[] nums, int val) {
+        if(nums.length == 0){
+            return 0;
+        }
+        int j = 0;
+        for(int i = 0; i < nums.length; i++){
+            if(nums[i] != val){
+                nums[j] = nums[i];
+                j++;
+            }
+        }
+        return j;
+    }
+}
+
+这道题就把j想象成一个新的空数组的index，如果原数组的index等于val，则跳过，不等于val，则把原数组的数字放到新数组的j位置，然后j++
+
+26 Remove Duplicates from Sorted Array
+https://leetcode.com/problems/remove-duplicates-from-sorted-array/description/
+
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        if(nums.length == 0){
+            return 0;
+        }
+        int l = 0;
+        for(int i = 1; i < nums.length; i++){
+            if(nums[i] != nums[l]){
+                l++;
+                nums[l] = nums[i];
+            }
+        }
+        return l + 1;
+    }
+}
+
+这道题和上一题差不多，也可以把l想象成新数组的index，只是上一题等于的是val，这一题等于的是新数组中第一个重复的数字，等于就跳过，
+一直到不等于时再添加。
