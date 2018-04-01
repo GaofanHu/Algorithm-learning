@@ -1,0 +1,19 @@
+https://leetcode.com/problems/intersection-of-two-linked-lists/description/
+
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode nodeA = headA;
+        ListNode nodeB = headB;
+        while (nodeA != nodeB) {
+            nodeA = nodeA == null ? headB : nodeA.next;
+            nodeB = nodeB == null ? headA : nodeB.next;
+        }
+        return nodeA;
+    }
+}
+
+这道题。。。比较神奇。。。如果有交叉处，则按上述写法，A和B会在交叉处相等，即while中的条件不满足
+
+如果没有交叉，则A和B会同时到达最后的NULL处，然后NULL == NULL成立，return nodeA,即return null;
+
+仔细想想，应该就是因为，A结束到B，B结束到A，导致两边最后走的路程其实是一样的
