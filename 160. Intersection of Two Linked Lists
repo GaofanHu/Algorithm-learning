@@ -16,4 +16,6 @@ public class Solution {
 
 如果没有交叉，则A和B会同时到达最后的NULL处，然后NULL == NULL成立，return nodeA,即return null;
 
-仔细想想，应该就是因为，A结束到B，B结束到A，导致两边最后走的路程其实是一样的
+仔细想想，应该就是因为，A结束到B，B结束到A，导致两边最后走的路程其实是一样的。
+
+当然也可以用hashset做，只不过时间复杂度可能会高一些（？不确定，看怎么写了）
