@@ -16,7 +16,7 @@ class Solution {
             if(right == null) return -1;
             return left.val - right.val;
         }
-    };      //这里为什么要有";"，在新建类的时候override（重写？），有什么要求吗
+    };      //comparator 是一个接口，所以override接口中的函数。
     
     public ListNode mergeKLists(ListNode[] lists) {     
         //这个的listnode[]，是个数组的话，那么每个Node后面链接的node不用放在数组里面吗
