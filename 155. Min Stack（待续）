@@ -20,7 +20,7 @@ class MinStack {
     }
     
     public void pop() {
-        if(s1.pop().equals(s2.peek())){      //用什么用equals，用==为什么不可以
+        if(s1.pop().equals(s2.peek())){      //用什么用equals，用==为什么不可以。用s1 - s2 == 0 却可以
             s2.pop();
         }
     }
